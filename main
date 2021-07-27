@@ -1,0 +1,30 @@
+from functions import *
+import requests
+import datetime
+import pandas as pd
+from dateutil import parser
+import sys
+
+income_sheet = pd.DataFrame()
+balance_sheet = pd.DataFrame()
+cash_flow_sheet = pd.DataFrame()
+financial_growth_sheet = pd.DataFrame()
+ratios_sheet = pd.DataFrame()
+key_metrics_sheet = pd.DataFrame()
+stock_ticker = []
+
+type = input("Enter frequency: ")
+no_stocks = int(input("Enter number of stocks to analyze: "))
+for i in range(no_stocks):
+    ticker = input("Enter stock: ")
+    stock_ticker.append(ticker)
+
+for stock in stock_ticker:
+    IS = get_stock_info(stock, type)
+    income_sheet = income_statement(IS, income_sheet)
+
+
+
+
+income_sheet.date = income_sheet.date.apply(time_period_annual)
+print(income_sheet)
