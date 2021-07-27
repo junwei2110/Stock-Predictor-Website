@@ -1,0 +1,74 @@
+import datetime
+from dateutil import parser
+import requests
+import pandas as pd
+
+
+# Input your API key
+api_polygon = 'f3Ap4fklGb6p5IphyTGaJJRvLRJtQ2y1'
+api_FMPC = 'f5fc1f8bd64c0288e56bb21b10840d1f'
+api_FMP = '9986f4c3a10c45418d13105f50ee7f94'
+
+def get_stock_info(ticker, type = "A"):
+    
+    if type == "A":
+        IS = requests.get(
+            f'https://financialmodelingprep.com/api/v3/income-statement/{ticker}?apikey={api_FMP}').json()
+        # BS = requests.get(
+        #     f'https://financialmodelingprep.com/api/v3/balance-sheet-statement/{ticker}?apikey={api_FMP}').json()
+        # CF = requests.get(
+        #     f'https://financialmodelingprep.com/api/v3/cash-flow-statement/{ticker}?apikey={api_FMP}').json()
+        # FG = requests.get(
+        #     f'https://financialmodelingprep.com/api/v3/financial-growth/{ticker}?apikey={api_FMP}').json()
+        # Ratios = requests.get(
+        #     f'https://financialmodelingprep.com/api/v3/ratios/{ticker}?apikey={api_FMP}').json()
+        # key_Metrics = requests.get(
+        #     f'https://financialmodelingprep.com/api/v3/key-metrics/{ticker}?apikey={api_FMP}').json()
+    
+        return IS
+    
+    elif type == "Q":
+        IS = requests.get(
+            f'https://financialmodelingprep.com/api/v3/income-statement/{ticker}?period=quarter&apikey={api_FMP}').json()
+        BS = requests.get(
+            f'https://financialmodelingprep.com/api/v3/balance-sheet-statement/{ticker}?period=quarter&apikey={api_FMP}').json()
+        CF = requests.get(
+            f'https://financialmodelingprep.com/api/v3/cash-flow-statement/{ticker}?period=quarter&apikey={api_FMP}').json()
+        Ratios = requests.get(
+            f'https://financialmodelingprep.com/api/v3/ratios/{ticker}?period=quarter&apikey={api_FMP}').json()
+        key_Metrics = requests.get(
+            f'https://financialmodelingprep.com/api/v3/key-metrics/{ticker}?period=quarter&apikey={api_FMP}').json()
+        FG = requests.get(
+            f'https://financialmodelingprep.com/api/v3/financial-growth/{ticker}?period=quarter&apikey={api_FMP}').json()
+
+        return IS,BS,CF,FG,Ratios,key_Metrics
+    
+    else:
+        return "Invalid entry, try again"
+
+
+def time_period_annual(date):
+    return parser.parse(date).year
+
+def time_period_quarter(date):
+    return parser.parse(date).year
+
+
+def income_statement(IS, income_sheet):        
+    for order in range(len(IS)):
+        income_sheet = pd.concat([income_sheet, pd.DataFrame(IS[order], index = [order])])
+
+        # income_sheet[year] = {}
+        # income_sheet[year]['stock'] = IS[order]['symbol']
+        # income_sheet[year]['Revenue'] = IS[order]['revenue'] / 1000000
+        # income_sheet[year]['Cost of Revenue'] = IS[order]['costOfRevenue'] / 1000000
+        # income_sheet[year]['Gross Profit'] = IS[order]['grossProfit'] / 1000000
+        # income_sheet[year]['R&D Expenses'] = IS[order]['researchAndDevelopmentExpenses'] / 1000000
+        # income_sheet[year]['Op Expenses'] = IS[order]['operatingExpenses'] / 1000000
+        # income_sheet[year]['Op Income'] = IS[order]['operatingIncome'] / 1000000
+        # income_sheet[year]['Net Income'] = IS[order]['netIncome'] / 1000000
+        # income_sheet[year]['EPS'] = IS[order]['eps']
+    
+    income_sheet.drop(columns = ["reportedCurrency","fillingDate","acceptedDate","period","link", "finalLink"], inplace = True)
+ 
+    return income_sheet
