@@ -10,7 +10,7 @@ The website will be segmented into several categories:
 3) DCF calculator
 
 For the fundamental analysis, we will look at the company's income statement, balance sheet and cash flow statements and showcase specific parameters of that company. We will also provide the PE, PS, EV, EV/EBITDA, P/BV, P/FCF, PEG and CAGR ratios to provide a well rounded fundamental view of the company.
-1) A pivot graph showcasing the companies' important parameters for the last 5 years, comparing it to its industry 
+1) A dashboard showcasing the important financial properties (income statement, balance sheet and cash flow statements) 
 2) Provide a valuation grading of several metrics of the company, i.e. Revenue Growth - A; Balance Sheet - B; and label the company into the following categories: GROWTH AND SUSTAINING, GROWTH BUT PLATEAUING, OVER-VALUED, UNDER-VALUED
 
 For the stock price predictor, we will look at the company's stock price movement for a specified number of years, and deploy specific machine learning algorithms to help predict the upcoming stock prices
