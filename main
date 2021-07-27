@@ -7,10 +7,10 @@ import sys
 
 income_sheet = pd.DataFrame()
 balance_sheet = pd.DataFrame()
-cash_flow_sheet = pd.DataFrame()
-financial_growth_sheet = pd.DataFrame()
-ratios_sheet = pd.DataFrame()
-key_metrics_sheet = pd.DataFrame()
+CF_sheet = pd.DataFrame()
+# financial_growth_sheet = pd.DataFrame()
+# ratios_sheet = pd.DataFrame()
+# key_metrics_sheet = pd.DataFrame()
 stock_ticker = []
 
 type = input("Enter frequency: ")
@@ -20,11 +20,22 @@ for i in range(no_stocks):
     stock_ticker.append(ticker)
 
 for stock in stock_ticker:
-    IS = get_stock_info(stock, type)
+    IS,BS,CF = get_stock_info(stock, type)
     income_sheet = income_statement(IS, income_sheet)
+    balance_sheet = balance_statement(BS, balance_sheet)
+    CF_sheet = CF_statement(CF, CF_sheet)
 
 
+if type == "A":
+    income_sheet.date = income_sheet.date.apply(time_period_annual)
+    balance_sheet.date = balance_sheet.date.apply(time_period_annual)
+    CF_sheet.date = CF_sheet.date.apply(time_period_annual)
+elif type == "Q":
+    income_sheet.date = income_sheet.date.apply(time_period_quarter)
+    balance_sheet.date = balance_sheet.date.apply(time_period_quarter)
+    CF_sheet.date = CF_sheet.date.apply(time_period_quarter)
 
-
-income_sheet.date = income_sheet.date.apply(time_period_annual)
-print(income_sheet)
+with pd.ExcelWriter('fundamentals.xlsx', mode='a') as writer:
+    income_sheet.to_excel(writer, sheet_name='income')
+    balance_sheet.to_excel(writer, sheet_name='balance')
+    CF_sheet.to_excel(writer, sheet_name='cash flow')
